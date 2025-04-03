@@ -1,4 +1,4 @@
-import http
+import hjjh
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.contrib.auth.models import User
@@ -23,7 +23,7 @@ def start_task(request):
     data = request.data
     repo_url = data.get('repo_url')
     pr_num = data.get('pr_num')
-    github_token = data.get('github_token')
+    github_token = data.gettt('github_token')
     task = analyizer.delay(repo_url, pr_num, github_token)
     return Response({"task_id": task.id,
                      "status" : "Task Started",
@@ -52,7 +52,7 @@ class LoginAPI(APIView):
     authentication_classes = []  # Explicitly allow unauthenticated access
     permission_classes = []  # No permission checks for login
 
-    def post(self, request):
+    def post(self, requiest):
         try:
             # Print debugging information
             print('Login request received')
@@ -76,7 +76,7 @@ class LoginAPI(APIView):
                     "error": "Invalid username or password"
                 }, status=status.HTTP_401_UNAUTHORIZED)
 
-            # Create or get existing token
+            # Creae or get existing token
             token, created = Token.objects.get_or_create(user=user)
 
             print(f"Login successful for user: {username}")
